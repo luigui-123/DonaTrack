@@ -1,0 +1,303 @@
+
+Casos de uso
+
+--Servicio de donaciones
+
+CU-03 — Registrarse (hecho)
+
+dependiendo del rol elegido la endpoint va a ser distinta
+
+/donante
+/beneficiaria
+/administradora
+
+Actor: Persona Donante, Beneficiaria, Administradora
+Objetivo: permitir que las personas se puedan registrar
+
+Flujo Principal:
+persona solicita poder registrarse en el sistema, elige el tipo de persona y rol
+sistema les pide los datos correspondientes
+persona llena los datos personales y lo envía
+sistema valida los datos, crea la persona y la guarda 
+
+CU-05 — Recibir y asociar donacion con donante (hecho)
+
+Actor: Administrador
+Objetivo: asociar al donante con su donación realizada en el depósito
+
+Flujo Principal: 
+administradora busca id del donante registrado (para ello le pedirá credenciales) o verifica que existe
+administradora manda dicho id junto con todos los bienes recibidos al sistema
+sistema usa estos atributos y crea todo lo relacionado a la donación
+Persiste la información de la donación 
+registra esta actividad en el servicio de incentivos
+
+CU-05 — Filtrar donaciones realizadas (hecho)
+
+/donante{id}/donaciones?(query params)
+
+Actor: Persona donante
+Objetivo: Permitir que el donante consulte sus donaciones aplicando filtros.
+
+Flujo principal:
+
+1. El donante solicita consultar sus donaciones con uno o más criterios:
+
+   * Estado de la donación.
+   * Categoría del bien.
+   * Subcategoría del bien.
+
+2. El sistema identifica al donante.
+3. El sistema busca las donaciones correspondientes.
+4. El sistema devuelve las donaciones que cumplen los criterios.
+
+
+CU-06 — Navegar entidades beneficiarias (hecho)
+
+/beneficiarias
+
+Actor: Persona donante
+Objetivo: Permitir al donante consultar las entidades beneficiarias registradas.
+
+Flujo principal:
+
+1. El donante solicita la lista de entidades beneficiarias.
+2. El sistema consulta las entidades registradas.
+3. El sistema devuelve la información disponible.
+4. El donante puede seleccionar una entidad para consultar su información.
+
+
+CU-07 — Consultar incentivos
+
+/donante{id}/sección Incentivos
+
+Actor: Persona humana donante
+Objetivo: Permitir consultar las misiones disponibles y las insignias obtenidas.
+
+Flujo principal
+donante presiona la sección de incentivos 
+sistema busca la sección incentivos asociado al donante
+sistema manda la sección de incentivos
+
+
+CU-08 — Recibir notificaciones de donaciones e incentivos
+
+/donante/{id}/notificaciones
+
+Actor: Persona donante
+Objetivo: Notificar al donante cuando ocurre alguno de los eventos relevantes.
+
+Eventos que disparan la notificación:
+
+* Una donación realizada por él es asignada.
+* Cumplió una misión.
+* Subió de categoría.
+* La entidad beneficiaria recibió la donación.
+
+Flujo principal
+donante hace click en la campanita de notificaciones
+sistema encuentra las notificaciones pendientes de ese donante
+sistema la manda las notificaciones pendientes
+donante la marca como vista
+sistema elimina las notificaciones pendientes     
+
+
+CU-09 — Seguir entrega de donación en mapa
+
+/donante/{id}/donaciones/en traslado/ubicación
+
+Actor: Persona donante
+Objetivo: Permitir visualizar el estado y ubicación de los camiones asociados a sus donaciones activas.
+
+Flujo principal:
+
+1. El donante solicita visualizar sus entregas activas.
+2. El sistema obtiene las donaciones que se encuentran en proceso de entrega.
+3. El sistema obtiene los camiones asociados.
+4. Para cada camión obtiene:
+
+   * Ubicación.
+   * Fecha/hora de última actualización.
+
+5. El sistema muestra los camiones sobre un mapa.
+
+Beneficiaria:
+
+CU-10 — Registrar necesidad material (hecho)
+
+/beneficiaria{id}/necesidad
+
+Actor: Entidad beneficiaria
+Objetivo: Registrar una necesidad concreta de bienes.
+
+Flujo principal:
+
+1. La entidad solicita registrar una necesidad.
+2. Ingresa los datos de la necesidad.
+3. El sistema valida la información.
+4. El sistema registra la necesidad.
+5. La necesidad queda disponible para los procesos de recomendación/asignación.
+
+
+CU-11 — Consultar estado de donaciones asignadas
+
+/beneficiaria{id}/donaciones/asignadas (hecho)
+
+Actor: Entidad beneficiaria
+Objetivo: Permitir consultar el estado de las donaciones que le fueron asignadas.
+
+Flujo principal:
+
+1. La entidad solicita sus donaciones.
+2. El sistema identifica a la entidad.
+3. El sistema obtiene sus donaciones asignadas.
+4. El sistema devuelve el estado de cada una.
+
+
+CU-12 — Confirmar recepción de entrega
+
+/beneficiaria{id}/entrega{id}/confirmar
+
+Actor: Entidad beneficiaria
+Objetivo: Registrar que una donación fue recibida y permitir adjuntar fotografías.
+
+Flujo principal:
+
+1. La entidad selecciona una entrega que tenía planificada.
+2. Solicita confirmar su recepción.
+3. Adjunta una o más fotografías.
+4. El sistema valida la información.
+5. El sistema registra la recepción y actualiza el estado de la entrega.
+6. El sistema actualiza el estado de las donaciones asociadas a la entrega 
+7. El sistema registra este hecho en el servicio de donaciones
+8. El sistema genera el evento correspondiente desde el servicio de donaciones.
+
+
+CU-14 — Seguir entrega en mapa
+
+/beneficiaria{id}/entrega/en translado
+Actor: Entidad beneficiaria
+Objetivo: Permitir visualizar las entregas activas que debe recibir.
+
+Flujo principal:
+
+1. La entidad solicita sus entregas activas.
+2. El sistema obtiene las donaciones que están siendo transportadas hacia ella.
+3. Obtiene los camiones asociados.
+4. Obtiene ubicación y última actualización.
+5. Muestra los camiones en el mapa.
+
+
+Administradora:
+
+CU-16 — Sacar donaciones vencidas
+
+/administradora{id}/deposito/donaciones/vencidas
+
+Actor: Persona administradora
+Objetivo: Sacar del depósito las donaciones vencidas
+Flujo:
+
+1. La administradora consulta las donaciones disponibles.
+2. Selecciona una donación vencida.
+3. Solicita actualizar su estado.
+4. El sistema verifica la fecha de vencimiento.
+5. El sistema actualiza el estado.
+
+CU-17 — Seleccionar entidad beneficiaria para donación
+
+/donación{id}/beneficiarias recomendadas/beneficiaria{id}
+
+Actor: Persona administradora
+Objetivo: Seleccionar la entidad beneficiaria final de una donación pendiente utilizando los resultados de los algoritmos.
+
+Flujo principal:
+
+1. La administradora consulta donaciones pendientes de asignación.
+2. Selecciona una donación.
+3. El sistema obtiene las recomendaciones generadas con anterioridad.
+4. El sistema muestra las entidades recomendadas.
+5. La administradora selecciona una entidad.
+6. El sistema registra la asignación.
+7. Se genera el evento correspondiente.
+
+Administradora
+
+CU-18 — Administrar camiones
+
+Actor: Persona administradora
+Objetivo: Gestionar los camiones disponibles para las entregas.
+
+Este requerimiento puede descomponerse en:
+
+* **CU-18.1 — Registrar camión**
+* **CU-18.2 — Modificar camión**
+* **CU-18.3 — Consultar camiones**
+* **CU-18.4 — Dar de baja camión**
+
+CU-19 — Consultar ranking de donantes
+
+/donantes/ranking/actual
+
+/donante/ranking/histórico
+
+
+Actor: Persona administradora
+Objetivo: Consultar el ranking mensual de donantes más activos y su historial.
+
+Puede dividirse en:
+
+* **CU-19.1 — Consultar ranking mensual**
+* **CU-19.2 — Consultar historial de rankings**
+
+**CU-19.1:**
+
+1. La administradora solicita el ranking.
+2. El sistema obtiene las métricas del mes.
+3. Ordena los donantes según el criterio definido.
+4. Muestra el ranking.
+
+**CU-19.2:**
+
+1. La administradora selecciona un período anterior.
+2. El sistema consulta el ranking almacenado.
+3. Muestra el ranking correspondiente.
+
+
+CU-20 — Importar donantes mediante CSV (hecho)
+
+/donantes/importar
+
+Actor: Persona administradora
+Objetivo: Importar más de 10.000 personas donantes registradas desde un archivo CSV para otorgarles un usuario.
+
+**Flujo principal:**
+
+1. La administradora selecciona un archivo CSV.
+2. El sistema valida el formato.
+3. El sistema procesa los registros.
+4. Para cada registro identifica al donante.
+5. El sistema crea/asigna el usuario correspondiente.
+6. Registra los resultados de la importación.
+7. Informa registros exitosos y errores.
+
+
+CU-21 — iniciar ruta
+
+/chofer{id}/inicio ruta
+
+Actor: chofer
+Objetivo: chofer informa al sistema que está iniciando ruta
+
+Flujo Principal: 
+
+
+Otras endpoints
+
+Procesos Asincronos (sheduler)
+
+Verificar inactividad 
+Recomendar Beneficiarias
+Solicitar Planificación
+Verificar Fechas Vencimiento    
+           

@@ -1,20 +1,17 @@
 package com.donatrack.incentivos.domain.model;
 
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.UUID;
-
-@Getter
-@Setter
+@Getter 
+@Setter 
 public class Insignia {
-    private UUID id;
     private String nombre;
     private String descripcion;
-    private String urlImagen;
-
-    public Insignia(String nombre, String descripcion) {
-        this.id = UUID.randomUUID();
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+    private Boolean esVisible;
+    public Insignia(String nombre,String descripcion){
+        this.nombre=nombre;
+        this.descripcion=descripcion;
+        this.esVisible=true;
     }
 }

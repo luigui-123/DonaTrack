@@ -1,6 +1,6 @@
 package com.donatrack.notificaciones.infrastructure.out.messaging;
 
-import com.donatrack.notificaciones.domain.port.out.NotificacionAdapter;
+import com.donatrack.notificaciones.application.out.NotificacionAdapter;
 import com.donatrack.notificaciones.domain.model.Notificacion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
